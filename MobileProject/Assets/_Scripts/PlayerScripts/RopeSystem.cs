@@ -4,6 +4,17 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+public struct JointInfo
+{
+    public Vector2 position;
+    public float joinDistance;
+    public JointInfo(Vector2 p, float jD)
+    {
+        position = p;
+        joinDistance = jD;
+    }
+};
+
 public class RopeSystem : MonoBehaviour {
     /*************** Constant Variables ***************/
     private const float ROPEMAXDISTANCE = 20.0f;
@@ -11,6 +22,7 @@ public class RopeSystem : MonoBehaviour {
     /*************** Public Variables ***************/
     public GameObject ropeHingeAnchor;
     public DistanceJoint2D ropeJoint;
+    //public SpringJoint2D ropeJoint;
     /*public Transform crosshair;
     public SpriteRenderer crosshairSprite;*/
     public PlayerController playerController;
@@ -21,11 +33,13 @@ public class RopeSystem : MonoBehaviour {
     /*************** Member Variables ***************/
     private bool _ropeAttached;
     private bool _distanceSet;
+    private int ropeWrapCount;
+    private float baseAnchorDistance;
     private Vector2 _playerPosition;
     private Rigidbody2D _ropeHingeAnchorRb;
     private SpriteRenderer _ropeHingeAnchorSprite;
     private List<Vector2> ropePositions = new List<Vector2>();
-    private Dictionary<int, Vector2> wrapPointsLookup = new Dictionary<int, Vector2>();
+    private Dictionary<int, JointInfo> wrapPointsLookup = new Dictionary<int, JointInfo>();
 
     private void Awake()
     {
@@ -56,9 +70,11 @@ public class RopeSystem : MonoBehaviour {
         if (_ropeAttached)
         {
             CheckRopeWrap();
-            //CheckRopeUnwrap();
+            CheckRopeUnwrap();
+            //ropeJoint.distance = currentAnchorDistance;
         }
         UpdateRopePositions();
+
     }
     /// <summary>
     /// Checks if there is a collider between the player and the last anchor point, 
@@ -76,7 +92,6 @@ public class RopeSystem : MonoBehaviour {
             */
             RaycastHit2D playerToNextAnchor = Physics2D.Raycast(_playerPosition, (lastRopePoint - _playerPosition).normalized,
                                                          Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, grappleMask);
-            Debug.Log(playerToNextAnchor.point);
             //if the raycast hit something retrieve the new closest point and add an anchor point there
             if (playerToNextAnchor.collider != null)
             {
@@ -86,16 +101,18 @@ public class RopeSystem : MonoBehaviour {
                 {
                     //Get the point closest to the character on the collider that was hit
                     Vector2 closestColliderPoint = GetClosestColliderPoint(playerToNextAnchor, nextColliderHit);
-                    if (wrapPointsLookup.ContainsValue(closestColliderPoint))
+                    /*if (wrapPointsLookup.ContainsValue(closestColliderPoint))
                     {
                         ResetRope();
                         return;
-                    }
+                    }*/
                     //Add the new point to the ropePositions list and the wrapPoints list
                     ropePositions.Add(closestColliderPoint);
-                    wrapPointsLookup.Add(0, closestColliderPoint);
+                    JointInfo wrapPoint = new JointInfo(closestColliderPoint, Vector2.Distance(_playerPosition, closestColliderPoint));
+                    wrapPointsLookup.Add(ropeWrapCount, wrapPoint);
+                    ropeWrapCount++;
                     //Reset distanceSet so it can be updated in the UpdateRopePositions function
-                    _distanceSet = false;
+                    ropeJoint.distance = wrapPoint.joinDistance;
                 }
             }
         }
@@ -103,26 +120,28 @@ public class RopeSystem : MonoBehaviour {
 
     private void CheckRopeUnwrap()
     {
-        if(ropePositions.Count == 1)
+        if(wrapPointsLookup.Count == 1)
         {
             Vector2 secondLastPoint = ropePositions[0];
-            if(Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
-                                 Vector2.Distance(secondLastPoint, _playerPosition), grappleMask))
+            if(!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
+                                 Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
             {
                 ropePositions.RemoveAt(ropePositions.Count() - 1);
-                wrapPointsLookup.Remove(0);
-                _distanceSet = false;
+                wrapPointsLookup.Remove(ropeWrapCount-1);
+                ropeWrapCount--;
+                ropeJoint.distance = baseAnchorDistance;
             }
         }
-        else if(ropePositions.Count > 1)
+        else if(wrapPointsLookup.Count > 1)
         {
-            Vector2 secondLastPoint = wrapPointsLookup[1];
-            if (Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
-                                 Vector2.Distance(secondLastPoint, _playerPosition), grappleMask))
+            Vector2 secondLastPoint = wrapPointsLookup[ropeWrapCount-2].position;
+            if (!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
+                                 Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
             {
                 ropePositions.RemoveAt(ropePositions.Count() - 1);
-                wrapPointsLookup.Remove(0);
-                _distanceSet = false;
+                wrapPointsLookup.Remove(ropeWrapCount-1);
+                ropeWrapCount--;
+                ropeJoint.distance = wrapPointsLookup[ropeWrapCount - 1].joinDistance;
             }
         }
     }
@@ -137,7 +156,7 @@ public class RopeSystem : MonoBehaviour {
             return;
         }
 
-        //if the raycast hits something enable to the rope and add the anchor point to the ropePositions list
+        //if the raycast hits something enable the rope and add the anchor point to the ropePositions list
         if (hit = Physics2D.Raycast(_playerPosition, aimDirection, ROPEMAXDISTANCE, grappleMask))
         {
             ropeRenderer.enabled = true;
@@ -145,7 +164,8 @@ public class RopeSystem : MonoBehaviour {
             if (!ropePositions.Contains(hit.point))
             {
                 ropePositions.Add(hit.point);
-                ropeJoint.distance = Vector2.Distance(_playerPosition, hit.point);
+                baseAnchorDistance = ropeJoint.distance = Vector2.Distance(_playerPosition, hit.point);
+                _distanceSet = true;
                 ropeJoint.enabled = true;
                 _ropeHingeAnchorSprite.enabled = true;
             }
