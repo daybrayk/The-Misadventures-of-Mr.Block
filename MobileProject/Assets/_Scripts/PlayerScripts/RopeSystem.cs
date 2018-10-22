@@ -123,13 +123,15 @@ public class RopeSystem : MonoBehaviour {
         if(wrapPointsLookup.Count == 1)
         {
             Vector2 secondLastPoint = ropePositions[0];
-            if(!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
+            float b = Vector2.Distance(transform.position, secondLastPoint);
+            float h = Mathf.Sqrt(Mathf.Pow(Vector2.Distance(transform.position, wrapPointsLookup[ropeWrapCount - 1].position), 2) -
+                                 Mathf.Pow((0.5f * b), 2));
+            float a = 0.5f * b * h;
+            if (!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
                                  Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
             {
-                if(!(secondLastPoint.x > transform.position.x && transform.position.x > wrapPointsLookup[ropeWrapCount-1].position.x) &&
-                  !(secondLastPoint.x < transform.position.x && transform.position.x < wrapPointsLookup[ropeWrapCount - 1].position.x) &&
-                  !(secondLastPoint.y > transform.position.x && transform.position.y > wrapPointsLookup[ropeWrapCount - 1].position.y) &&
-                   !(secondLastPoint.y < transform.position.x && transform.position.y < wrapPointsLookup[ropeWrapCount - 1].position.y))
+                Debug.Log(a);
+                if (a < 2f)
                 {
                     ropePositions.RemoveAt(ropePositions.Count() - 1);
                     wrapPointsLookup.Remove(ropeWrapCount - 1);
@@ -142,13 +144,15 @@ public class RopeSystem : MonoBehaviour {
         else if(wrapPointsLookup.Count > 1)
         {
             Vector2 secondLastPoint = wrapPointsLookup[ropeWrapCount-2].position;
+            float b = Vector2.Distance(transform.position, secondLastPoint);
+            float h = Mathf.Sqrt(Mathf.Pow(Vector2.Distance(transform.position, wrapPointsLookup[ropeWrapCount - 1].position), 2) -
+                                 Mathf.Pow((0.5f * b), 2));
+            float a = 0.5f * b * h;
             if (!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
                                  Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
             {
-                if (!(secondLastPoint.x > transform.position.x && transform.position.x > wrapPointsLookup[ropeWrapCount - 1].position.x) &&
-                  !(secondLastPoint.x < transform.position.x && transform.position.x < wrapPointsLookup[ropeWrapCount - 1].position.x) &&
-                  !(secondLastPoint.y > transform.position.x && transform.position.y > wrapPointsLookup[ropeWrapCount - 1].position.y) &&
-                   !(secondLastPoint.y < transform.position.x && transform.position.y < wrapPointsLookup[ropeWrapCount - 1].position.y))
+                Debug.Log(a);
+                if (a < 2f)
                 {
                     ropePositions.RemoveAt(ropePositions.Count() - 1);
                     wrapPointsLookup.Remove(ropeWrapCount - 1);
