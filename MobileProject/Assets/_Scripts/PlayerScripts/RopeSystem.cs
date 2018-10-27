@@ -256,12 +256,12 @@ public class RopeSystem : MonoBehaviour {
         }
     }
 
-    private Vector2 GetClosestColliderPoint(RaycastHit2D hit, PolygonCollider2D collider)
+    private Vector2 GetClosestColliderPoint(RaycastHit2D hit, PolygonCollider2D polyCollider)
     {
         //Store the points of the collider in a dictionary
-        Dictionary<float, Vector2> distanceDictionary = collider.points.ToDictionary<Vector2, float, Vector2>(
-        position => Vector2.Distance(hit.point, collider.transform.TransformPoint(position)),
-        position => collider.transform.TransformPoint(position));
+        Dictionary<float, Vector2> distanceDictionary = polyCollider.points.ToDictionary<Vector2, float, Vector2>(
+        position => Vector2.Distance(hit.point, polyCollider.transform.TransformPoint(position)),
+        position => polyCollider.transform.TransformPoint(position));
         //Store the keys of the dictionary in a list and then sort the list
         List<float> sortedList = distanceDictionary.Keys.ToList();
         sortedList.Sort();
