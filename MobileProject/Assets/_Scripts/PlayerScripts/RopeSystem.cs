@@ -28,18 +28,20 @@ public class RopeSystem : MonoBehaviour {
     public PlayerController playerController;
     public Camera main;
     public LayerMask grappleMask;
+    public LayerMask ropeCutterMask;
     public LineRenderer ropeRenderer;
 
     /*************** Member Variables ***************/
     private bool _ropeAttached;
     private bool _distanceSet;
+    private bool _ropeIsCut;
     private int ropeWrapCount;
     private float baseAnchorDistance;
     private Vector2 _playerPosition;
     private Rigidbody2D _ropeHingeAnchorRb;
     private SpriteRenderer _ropeHingeAnchorSprite;
     private List<Vector2> ropePositions = new List<Vector2>();
-    private Dictionary<int, JointInfo> wrapPointsLookup = new Dictionary<int, JointInfo>();
+    private Dictionary<Vector2, int> wrapPointsLookup = new Dictionary<Vector2, int>();
 
     private void Awake()
     {
@@ -47,6 +49,8 @@ public class RopeSystem : MonoBehaviour {
         _playerPosition = transform.position;
         _ropeHingeAnchorRb = ropeHingeAnchor.GetComponent<Rigidbody2D>();
         _ropeHingeAnchorSprite = ropeHingeAnchor.GetComponent<SpriteRenderer>();
+        wrapPointsLookup.Clear();
+        ropePositions.Clear();
     }
 
     private void Update()
@@ -54,7 +58,7 @@ public class RopeSystem : MonoBehaviour {
         //update reference to players position
         _playerPosition = transform.position;
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !_ropeIsCut)
         {
             Vector2 touchPosition = main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Vector2 aimDirection = touchPosition - new Vector2(transform.position.x, transform.position.y);
@@ -70,12 +74,14 @@ public class RopeSystem : MonoBehaviour {
         if (_ropeAttached)
         {
             CheckRopeWrap();
-            CheckRopeUnwrap();
-            //ropeJoint.distance = currentAnchorDistance;
+            //Don't need to unwrap if there is only one anchor point
+            if(ropePositions.Count > 1)
+                CheckRopeUnwrap();
         }
         UpdateRopePositions();
 
     }
+    #region Rope Wrap
     /// <summary>
     /// Checks if there is a collider between the player and the last anchor point, 
     /// if so create a new anchor point for the rope wrap around the collider
@@ -92,7 +98,7 @@ public class RopeSystem : MonoBehaviour {
             */
             RaycastHit2D playerToNextAnchor = Physics2D.Raycast(_playerPosition, (lastRopePoint - _playerPosition).normalized,
                                                          Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, grappleMask);
-            //if the raycast hit something retrieve the new closest point and add an anchor point there
+            //if the raycast hits a grapple point retrieve the new closest point and add an anchor point there
             if (playerToNextAnchor.collider != null)
             {
                 //Get a reference to the collider that was hit
@@ -101,67 +107,99 @@ public class RopeSystem : MonoBehaviour {
                 {
                     //Get the point closest to the character on the collider that was hit
                     Vector2 closestColliderPoint = GetClosestColliderPoint(playerToNextAnchor, nextColliderHit);
-                    /*if (wrapPointsLookup.ContainsValue(closestColliderPoint))
+                    if (wrapPointsLookup.ContainsKey(closestColliderPoint))
                     {
                         ResetRope();
                         return;
-                    }*/
+                    }
                     //Add the new point to the ropePositions list and the wrapPoints list
                     ropePositions.Add(closestColliderPoint);
-                    JointInfo wrapPoint = new JointInfo(closestColliderPoint, Vector2.Distance(_playerPosition, closestColliderPoint));
-                    wrapPointsLookup.Add(ropeWrapCount, wrapPoint);
+                    wrapPointsLookup.Add(closestColliderPoint, 0);
                     ropeWrapCount++;
-                    //Reset distanceSet so it can be updated in the UpdateRopePositions function
-                    ropeJoint.distance = wrapPoint.joinDistance;
+                    ropeJoint.distance = Vector2.Distance(_playerPosition, closestColliderPoint);
                 }
+                return;
             }
+
+            //if the raycast hits a Rope Cutter obstacle we reset the rope
+            playerToNextAnchor = Physics2D.Raycast(_playerPosition, (lastRopePoint - _playerPosition).normalized,
+                                                         Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, ropeCutterMask);
+            if (playerToNextAnchor.collider != null)
+            {
+                _ropeIsCut = true;
+                ResetRope();
+            }
+
+
         }
+    }
+
+    private float AngleBetweenVector2(Vector2 vec1, Vector2 vec2)
+    {
+        Vector2 difference = vec2 - vec1;
+        float sign = (vec2.y < vec1.y) ? -1.0f : 1.0f;
+        return Vector2.Angle(Vector2.right, difference) * sign;
     }
 
     private void CheckRopeUnwrap()
     {
-        if(wrapPointsLookup.Count == 1)
+        //Anchor point we want to unwrap to
+        int anchorIndex = ropePositions.Count - 2;
+        //Current anchor point the player is hanging from
+        int hingeIndex = ropePositions.Count - 1;
+        Vector2 anchorPosition = ropePositions[anchorIndex];
+        Vector2 hingePosition = ropePositions[hingeIndex];
+        Vector2 hingeDir = hingePosition - anchorPosition;
+        float hingeAngle = Vector2.SignedAngle(anchorPosition, hingeDir);
+        Vector2 playerDir = _playerPosition - anchorPosition;
+        float playerAngle = Vector2.SignedAngle(anchorPosition, playerDir);
+        if (hingeAngle < 0f)
         {
-            Vector2 secondLastPoint = ropePositions[0];
-            float b = Vector2.Distance(transform.position, secondLastPoint);
-            float h = Mathf.Sqrt(Mathf.Pow(Vector2.Distance(transform.position, wrapPointsLookup[ropeWrapCount - 1].position), 2) -
-                                 Mathf.Pow((0.5f * b), 2));
-            float a = 0.5f * b * h;
-            if (!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
-                                 Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
-            {
-                Debug.Log(a);
-                if (a < 2f)
-                {
-                    ropePositions.RemoveAt(ropePositions.Count() - 1);
-                    wrapPointsLookup.Remove(ropeWrapCount - 1);
-                    ropeWrapCount--;
-                    ropeJoint.distance = baseAnchorDistance;
-                }
-                    
-            }
+            hingeAngle += 360f;
         }
-        else if(wrapPointsLookup.Count > 1)
+            
+        if (playerAngle < 0f)
         {
-            Vector2 secondLastPoint = wrapPointsLookup[ropeWrapCount-2].position;
-            float b = Vector2.Distance(transform.position, secondLastPoint);
-            float h = Mathf.Sqrt(Mathf.Pow(Vector2.Distance(transform.position, wrapPointsLookup[ropeWrapCount - 1].position), 2) -
-                                 Mathf.Pow((0.5f * b), 2));
-            float a = 0.5f * b * h;
-            if (!Physics2D.Raycast(_playerPosition, (secondLastPoint - _playerPosition).normalized,
-                                 Vector2.Distance(secondLastPoint, _playerPosition) - 0.1f, grappleMask))
+            playerAngle += 360f;
+        }
+            
+
+        if(playerAngle < hingeAngle)
+        {
+            if (wrapPointsLookup[hingePosition] == 1)
             {
-                Debug.Log(a);
-                if (a < 2f)
-                {
-                    ropePositions.RemoveAt(ropePositions.Count() - 1);
-                    wrapPointsLookup.Remove(ropeWrapCount - 1);
-                    ropeWrapCount--;
-                    ropeJoint.distance = wrapPointsLookup[ropeWrapCount - 1].joinDistance;
-                }
+                Debug.Log("Player Angle: " + playerAngle);
+                Debug.Log("Hinge Angle: " + hingeAngle);
+                UnwrapRopePosition(anchorIndex, hingeIndex);
+                return;
             }
+
+            wrapPointsLookup[hingePosition] = -1;
+        }
+        else
+        {
+            if(wrapPointsLookup[hingePosition] == -1)
+            {
+                Debug.Log("Player Angle: " + playerAngle);
+                Debug.Log("Hinge Angle" + hingeAngle);
+                UnwrapRopePosition(anchorIndex, hingeIndex);
+                return;
+            }
+            Debug.DrawLine(transform.position, hingePosition, Color.red);
+            wrapPointsLookup[hingePosition] = 1;
         }
     }
+
+    private void UnwrapRopePosition(int anchorIndex, int hingeIndex)
+    {
+        Vector2 newAnchorPosition = ropePositions[anchorIndex];
+        _ropeHingeAnchorRb.transform.position = newAnchorPosition;
+        ropeJoint.distance = Vector2.Distance(transform.position, newAnchorPosition);
+        wrapPointsLookup.Remove(ropePositions[hingeIndex]);
+        ropePositions.RemoveAt(hingeIndex);
+
+    }
+    #endregion
 
     private void ShootHook(Vector2 aimDirection)
     {
@@ -204,6 +242,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.enabled = false;
         ropeRenderer.enabled = false;
         playerController.isMoving = false;
+        _distanceSet = false;
         ropeRenderer.positionCount = 2;
         ropeRenderer.SetPosition(0, transform.position);
         ropeRenderer.SetPosition(1, transform.position);
