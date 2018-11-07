@@ -154,14 +154,10 @@ public class RopeSystem : MonoBehaviour {
         Vector2 playerDir = _playerPosition - anchorPosition;
         float playerAngle = Vector2.SignedAngle(anchorPosition, playerDir);
         if (hingeAngle < 0f)
-        {
             hingeAngle += 360f;
-        }
             
         if (playerAngle < 0f)
-        {
             playerAngle += 360f;
-        }
             
 
         if(playerAngle < hingeAngle)
