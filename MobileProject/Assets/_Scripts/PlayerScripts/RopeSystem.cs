@@ -42,6 +42,8 @@ public class RopeSystem : MonoBehaviour {
     private SpriteRenderer _ropeHingeAnchorSprite;
     private List<Vector2> ropePositions = new List<Vector2>();
     private Dictionary<Vector2, int> wrapPointsLookup = new Dictionary<Vector2, int>();
+    public PolygonCollider2D attachedCollider;
+    public float oldColliderPosition;
 
     private void Awake()
     {
@@ -70,7 +72,8 @@ public class RopeSystem : MonoBehaviour {
 
             ShootHook(shootDirection);
         }
-
+        if (attachedCollider == null)
+            ResetRope();
         if (_ropeAttached)
         {
             CheckRopeWrap();
@@ -210,6 +213,8 @@ public class RopeSystem : MonoBehaviour {
         //if the raycast hits something enable the rope and add the anchor point to the ropePositions list
         if (hit = Physics2D.Raycast(_playerPosition, aimDirection, ROPEMAXDISTANCE, grappleMask))
         {
+            attachedCollider = (PolygonCollider2D)hit.collider;
+            oldColliderPosition = attachedCollider.transform.position.y;
             ropeRenderer.enabled = true;
             _ropeAttached = true;
             if (!ropePositions.Contains(hit.point))
@@ -253,7 +258,36 @@ public class RopeSystem : MonoBehaviour {
         //if the rope isn't attached then don't do anything
         if(!_ropeAttached)
             return;
-
+        //Update rope positions and wrap positions if the player is being carried upwards by a block
+        if (attachedCollider.transform.position.y - oldColliderPosition > 0)
+        {
+            for (int i = 0; i < ropePositions.Count; i++)
+            {
+                if (wrapPointsLookup.ContainsKey(ropePositions[i]))
+                {
+                    int temp = wrapPointsLookup[ropePositions[i]];
+                    wrapPointsLookup.Remove(ropePositions[i]);
+                    ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + attachedCollider.transform.position.y - oldColliderPosition);
+                    wrapPointsLookup.Add(ropePositions[i], temp);
+                }
+                else
+                    ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + attachedCollider.transform.position.y - oldColliderPosition);
+            }
+        }else if(ropePositions.Count > 1)
+        {
+            for (int i = 1; i < ropePositions.Count; i++)
+            {
+                if (wrapPointsLookup.ContainsKey(ropePositions[i]))
+                {
+                    int temp = wrapPointsLookup[ropePositions[i]];
+                    wrapPointsLookup.Remove(ropePositions[i]);
+                    ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + Time.deltaTime);
+                    wrapPointsLookup.Add(ropePositions[i], temp);
+                }
+                else
+                    ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + Time.deltaTime);
+            }
+        }
         ropeRenderer.positionCount = ropePositions.Count + 1;
 
         for (int i = ropeRenderer.positionCount - 1; i >= 0; i--)
@@ -288,6 +322,7 @@ public class RopeSystem : MonoBehaviour {
             {
                 ropeRenderer.SetPosition(i, transform.position);
             }
+            oldColliderPosition = attachedCollider.transform.position.y;
         }
     }
 

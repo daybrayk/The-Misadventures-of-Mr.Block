@@ -1,25 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-public class PlayerController : MonoBehaviour {
-    public bool isMoving;
-    public Vector2 ropeHook;
-    public float swingForce;
+
+public class WorldMove : MonoBehaviour {
+    float moveSpeed = 1.0f;
+
 	// Use this for initialization
 	void Start () {
-        if (swingForce <= 0)
-            swingForce = 4.0f;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        float y = transform.position.y + (moveSpeed * Time.deltaTime);
+        transform.position = new Vector3(transform.position.x, y, 0);
 	}
 
     private void OnTriggerEnter2D(Collider2D c)
     {
         if (c.tag == "GarbageCollector")
-            SceneManager.LoadScene("TitleScene");
+            Destroy(gameObject);
     }
 }
