@@ -59,7 +59,7 @@ public class RopeSystem : MonoBehaviour {
         //update reference to players position
         _playerPosition = transform.position;
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !_ropeIsCut)
+        /*if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !_ropeIsCut)
         {
             Vector2 touchPosition = main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Vector2 aimDirection = touchPosition - new Vector2(transform.position.x, transform.position.y);
@@ -70,7 +70,7 @@ public class RopeSystem : MonoBehaviour {
             Vector3 shootDirection = Quaternion.Euler(0, 0, aimAngle * Mathf.Rad2Deg) * Vector2.right;
 
             ShootHook(shootDirection);
-        }
+        }*/
         if (attachedCollider == null)
             ResetRope();
         if (_ropeAttached)
@@ -79,9 +79,8 @@ public class RopeSystem : MonoBehaviour {
             //Don't need to unwrap if there is only one anchor point
             if(ropePositions.Count > 1)
                 CheckRopeUnwrap();
+            UpdateRopePositions();
         }
-        UpdateRopePositions();
-
     }
     #region Rope Wrap
     /// <summary>
@@ -194,18 +193,27 @@ public class RopeSystem : MonoBehaviour {
     }
     #endregion
 
-    private void ShootHook(Vector2 aimDirection)
+    #region Rope Helper Functions
+    public void ShootHook(Touch touch)
     {
-        RaycastHit2D hit;
-        //if the rope is already attached then detach the rope and exit the function
         if (_ropeAttached)
         {
             ResetRope();
             return;
         }
+        RaycastHit2D hit;
+        Vector2 touchPosition = main.ScreenToWorldPoint(/*Input.GetTouch(0)*/touch.position);
+        Vector2 aimDirection = touchPosition - new Vector2(transform.position.x, transform.position.y);
+        float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
+
+        if (aimAngle < 0f)
+            aimAngle = Mathf.PI * 2 + aimAngle;
+        Vector3 shootDirection = Quaternion.Euler(0, 0, aimAngle * Mathf.Rad2Deg) * Vector2.right;
+        //if the rope is already attached then detach the rope and exit the function
+
 
         //if the raycast hits something enable the rope and add the anchor point to the ropePositions list
-        if (hit = Physics2D.Raycast(_playerPosition, aimDirection, ROPEMAXDISTANCE, grappleMask))
+        if (hit = Physics2D.Raycast(_playerPosition, /*aimDirection*/ shootDirection, ROPEMAXDISTANCE, grappleMask))
         {
             attachedCollider = (PolygonCollider2D)hit.collider;
             oldColliderPosition = attachedCollider.transform.position.y;
@@ -219,6 +227,7 @@ public class RopeSystem : MonoBehaviour {
                 ropeJoint.enabled = true;
                 _ropeHingeAnchorSprite.enabled = true;
             }
+            UpdateRopePositions();
         }
         //if the raycast doesn't hit anything disable the rope
         else
@@ -227,6 +236,7 @@ public class RopeSystem : MonoBehaviour {
             _ropeAttached = false;
             ropeJoint.enabled = false;
         }
+
 
     }
     /// <summary>
@@ -250,8 +260,8 @@ public class RopeSystem : MonoBehaviour {
     private void UpdateRopePositions()
     {
         //if the rope isn't attached then don't do anything
-        if(!_ropeAttached)
-            return;
+        /*if(!_ropeAttached)
+            return;*/
         //Update rope positions and wrap positions if the player is being carried upwards by a block
         if (attachedCollider.transform.position.y - oldColliderPosition > 0)
         {
@@ -332,11 +342,12 @@ public class RopeSystem : MonoBehaviour {
         //return the position vector of the point that is closest to the player
         return distanceDictionary.Any() ? distanceDictionary[sortedList.First()] : Vector2.zero;
     }
+    #endregion
 
     private void OnCollisionEnter2D(Collision2D c)
     {
         if (c.collider.tag == "Ground")
-            SceneManager.LoadScene("TitleScene");
+            SceneManager.LoadScene("GameScene");
     }
 
     /*************** Getters and Setters ***************/

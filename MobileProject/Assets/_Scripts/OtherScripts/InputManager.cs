@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
     public RopeSystem rs;
-	// Use this for initialization
-	void Start () {
+    Vector2 begin = Vector2.zero;
+    Vector2 end = Vector2.zero;
+    float beginTime = 0;
+    float endTime = 0;
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        foreach(Touch touch in Input.touches)
+        if (Input.touchCount > 0)
         {
-            if(touch.phase == TouchPhase.Ended)
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
             {
-                if(touch.tapCount == 1 && !rs.ropeIsCut)
+                begin = touch.position;
+                beginTime = Time.time;
+            }
+            if (touch.phase == TouchPhase.Ended)
+            {
+                end = touch.position;
+                endTime = Time.time;
+                Debug.Log("Touch Time: " + (end - begin).magnitude);
+                if ((end - begin).magnitude < 1f)
                 {
-
-                }else
+                    rs.ShootHook(touch);
+                }
+                else
                 {
-
                 }
             }
         }
