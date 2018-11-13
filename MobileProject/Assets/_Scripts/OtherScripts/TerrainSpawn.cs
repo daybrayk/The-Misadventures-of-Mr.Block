@@ -12,27 +12,31 @@ public class TerrainSpawn : MonoBehaviour {
     private float cutterTimer;
 	// Use this for initialization
 	void Start () {
-		
+        spawnTimer = 2.1f;
+        cutterTimer = 10.1f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         spawnTimer += Time.deltaTime;
         cutterTimer += Time.deltaTime;
-        if (spawnTimer > spawnTime)
+        if (spawnTimer >= spawnTime)
         {
             foreach(Transform i in terrainSpawners)
             {
-                if (Random.Range(1, 4) == 1)
-                    Instantiate(terrain, i.position, i.rotation);
+                if (Random.Range(0, 4) <= 1)
+                {
+                    if(cutterTimer >= cutterTime)
+                    {
+                        Instantiate(ropeCutter, i.position, i.rotation);
+                        cutterTimer = 0;
+                    }
+                    else
+                        Instantiate(terrain, i.position, i.rotation);
+                }
+                    
             }
             spawnTimer = 0f;
-        }
-
-        if(cutterTimer > cutterTime)
-        {
-            int random = Random.Range(0, 4);
-            Instantiate(ropeCutter, terrainSpawners[random].transform.position, ropeCutter.transform.rotation);
         }
 
 	}

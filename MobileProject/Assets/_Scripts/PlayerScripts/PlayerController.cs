@@ -20,6 +20,6 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D c)
     {
         if (c.tag == "GarbageCollector")
-            SceneManager.LoadScene("TitleScene");
+            SceneManager.LoadScene("GameScene");
     }
 }

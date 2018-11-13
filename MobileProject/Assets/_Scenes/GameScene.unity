@@ -1192,6 +1192,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1812718564086668, guid: 90736d2914e884605b5985c3b5b9d7a1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 90736d2914e884605b5985c3b5b9d7a1, type: 2}
   m_IsPrefabParent: 0
@@ -1607,7 +1611,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4233780995144538, guid: 7f35ef991740e4d4a8235324ad27d0cf, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.95
+      value: -1.85
       objectReference: {fileID: 0}
     - target: {fileID: 4233780995144538, guid: 7f35ef991740e4d4a8235324ad27d0cf, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2062,6 +2066,7 @@ MonoBehaviour:
   - {fileID: 103783695}
   - {fileID: 460855271}
   terrain: {fileID: 1831936600374970, guid: e3986193e9aed48f6bf931562af34e0a, type: 2}
+  ropeCutter: {fileID: 1812718564086668, guid: 90736d2914e884605b5985c3b5b9d7a1, type: 2}
 --- !u!4 &924119183
 Transform:
   m_ObjectHideFlags: 0
@@ -4141,7 +4146,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.8
+      value: -1.8399999
       objectReference: {fileID: 0}
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_LocalPosition.y
@@ -4170,6 +4175,10 @@ Prefab:
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}

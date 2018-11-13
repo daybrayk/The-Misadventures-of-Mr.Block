@@ -339,4 +339,10 @@ public class RopeSystem : MonoBehaviour {
             SceneManager.LoadScene("TitleScene");
     }
 
+    /*************** Getters and Setters ***************/
+    public bool ropeIsCut
+    {
+        get { return _ropeIsCut; }
+    }
+
 }
