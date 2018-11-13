@@ -17,7 +17,7 @@ public struct JointInfo
 
 public class RopeSystem : MonoBehaviour {
     /*************** Constant Variables ***************/
-    private const float ROPEMAXDISTANCE = 20.0f;
+    private const float ROPEMAXDISTANCE = 5.0f;
 
     /*************** Public Variables ***************/
     public GameObject ropeHingeAnchor;
@@ -36,7 +36,6 @@ public class RopeSystem : MonoBehaviour {
     private bool _distanceSet;
     private bool _ropeIsCut;
     private int ropeWrapCount;
-    private float baseAnchorDistance;
     private Vector2 _playerPosition;
     private Rigidbody2D _ropeHingeAnchorRb;
     private SpriteRenderer _ropeHingeAnchorSprite;
@@ -167,8 +166,6 @@ public class RopeSystem : MonoBehaviour {
         {
             if (wrapPointsLookup[hingePosition] == 1)
             {
-                Debug.Log("Player Angle: " + playerAngle);
-                Debug.Log("Hinge Angle: " + hingeAngle);
                 UnwrapRopePosition(anchorIndex, hingeIndex);
                 return;
             }
@@ -179,12 +176,9 @@ public class RopeSystem : MonoBehaviour {
         {
             if(wrapPointsLookup[hingePosition] == -1)
             {
-                Debug.Log("Player Angle: " + playerAngle);
-                Debug.Log("Hinge Angle" + hingeAngle);
                 UnwrapRopePosition(anchorIndex, hingeIndex);
                 return;
             }
-            Debug.DrawLine(transform.position, hingePosition, Color.red);
             wrapPointsLookup[hingePosition] = 1;
         }
     }
@@ -220,7 +214,7 @@ public class RopeSystem : MonoBehaviour {
             if (!ropePositions.Contains(hit.point))
             {
                 ropePositions.Add(hit.point);
-                baseAnchorDistance = ropeJoint.distance = Vector2.Distance(_playerPosition, hit.point);
+                ropeJoint.distance = Vector2.Distance(_playerPosition, hit.point);
                 _distanceSet = true;
                 ropeJoint.enabled = true;
                 _ropeHingeAnchorSprite.enabled = true;
