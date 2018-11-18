@@ -24,18 +24,31 @@ public class DataManager : MonoBehaviour {
         if(score > highScore)
             PlayerPrefs.SetInt("highScore", score);
         PlayerPrefs.SetInt("currency", currency);
+        PlayerPrefs.SetFloat("musicVol", AudioManager.instance.musicSource.volume);
+        PlayerPrefs.SetFloat("sfxVol", AudioManager.instance.sfxSource.volume);
+        PlayerPrefs.SetInt("musicOnOff", AudioManager.instance.musicSource.mute ? 0 : 1);
+        PlayerPrefs.SetInt("sfxOnOff", AudioManager.instance.sfxSource.mute ? 0 : 1);
     }
 
     private void LoadGameData()
     {
         if (PlayerPrefs.HasKey("highScore"))
-        {
             _highScore = PlayerPrefs.GetInt("highScore");
-        }
+
         if (PlayerPrefs.HasKey("currency"))
-        {
             _currency = PlayerPrefs.GetInt("currency");
-        }
+
+        if (PlayerPrefs.HasKey("musicOnOff"))
+            AudioManager.instance.musicSource.mute = PlayerPrefs.GetInt("musicOnOff") != 0;
+
+        if (PlayerPrefs.HasKey("musicVol"))
+            AudioManager.instance.musicSource.volume = PlayerPrefs.GetFloat("musicVol");
+
+        if(PlayerPrefs.HasKey("sfxOnOff"))
+            AudioManager.instance.sfxSource.mute = PlayerPrefs.GetInt("sfxOnOff") != 0;
+
+        if (PlayerPrefs.HasKey("sfxVol"))
+            AudioManager.instance.sfxSource.volume = PlayerPrefs.GetFloat("sfxVol");
     }
 
     /*************** Getters and Setters ***************/

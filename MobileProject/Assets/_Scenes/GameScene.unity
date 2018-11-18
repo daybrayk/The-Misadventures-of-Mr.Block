@@ -2992,7 +2992,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4102605005660348, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.015294
+      value: 4.03
       objectReference: {fileID: 0}
     - target: {fileID: 4102605005660348, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5060,7 +5060,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4102605005660348, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6.15
+      value: -5.52
       objectReference: {fileID: 0}
     - target: {fileID: 4102605005660348, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5088,7 +5088,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1229587436207752, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
       propertyPath: m_Name
-      value: GarbageCollector (1)
+      value: KillZone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1229587436207752, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
+      propertyPath: m_TagString
+      value: KillZone
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 282288b4cd8ed48ee93f785bc8b2839d, type: 2}
