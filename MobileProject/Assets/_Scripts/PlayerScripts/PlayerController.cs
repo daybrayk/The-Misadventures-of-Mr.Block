@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
     public bool isMoving;
-    public Vector2 ropeHook;
-    public float swingForce;
+    private Rigidbody2D rb;
+    private float swingForce;
 	// Use this for initialization
 	void Start () {
         if (swingForce <= 0)
             swingForce = 4.0f;
+        if (!rb)
+            rb = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -17,6 +19,17 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 
+    public void Dash(int direction)
+    {
+        switch(direction){
+            case 0:
+                rb.AddRelativeForce(Vector2.right * swingForce, ForceMode2D.Impulse);
+                break;
+            case 1:
+                rb.AddRelativeForce(Vector2.left * swingForce, ForceMode2D.Impulse);
+                break;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D c)
     {
         if (c.tag == "GarbageCollector")

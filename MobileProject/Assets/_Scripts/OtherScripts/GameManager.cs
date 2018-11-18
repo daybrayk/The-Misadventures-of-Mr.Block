@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
-    public static GameManager _instance = null;
-    public int score;
-    private int _highScore;
+    private static GameManager _instance = null;
 	// Use this for initialization
 	void Start () {
 		if(_instance == null)
@@ -29,12 +27,7 @@ public class GameManager : MonoBehaviour {
     }
 
     /*************** Getters and Setters ***************/
-    public int highScore
-    {
-        get { return _highScore; }
-    }
-
-    public GameManager instance
+    public static GameManager instance
     {
         get { return _instance; }
     }

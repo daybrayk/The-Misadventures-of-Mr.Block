@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
     public RopeSystem rs;
+    public PlayerController pc;
     Vector2 begin = Vector2.zero;
     Vector2 end = Vector2.zero;
     float beginTime = 0;
@@ -29,12 +30,17 @@ public class InputManager : MonoBehaviour {
                 end = touch.position;
                 endTime = Time.time;
                 Debug.Log("Touch Time: " + (end - begin).magnitude);
-                if ((end - begin).magnitude < 1f)
+                Vector2 dif = end - begin;
+                if (dif.magnitude < 1f)
                 {
                     rs.ShootHook(touch);
                 }
                 else
                 {
+                    if (dif.x > 0)
+                        pc.Dash(0);
+                    else
+                        pc.Dash(1);
                 }
             }
         }
