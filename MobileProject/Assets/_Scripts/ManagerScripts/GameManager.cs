@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour {
     {
         DataManager.instance.scoreStart = false;
         DataManager.instance.score = 0;
+        AudioManager.instance.musicSource.Stop();
     }
 
     /*************** Getters and Setters ***************/

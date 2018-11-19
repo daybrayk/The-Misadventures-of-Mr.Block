@@ -25,8 +25,12 @@ public class GameUI : MonoBehaviour {
 
     private void Start()
     {
+        DataManager.instance.LoadGameData();
+        musicMute.isOn = AudioManager.instance.musicSource.mute;
+        sfxMute.isOn = AudioManager.instance.sfxSource.mute;
+        AudioManager.instance.musicSource.Play();
         SetUIText();
-
+        AudioManager.instance.musicSource.Play();
         //Setup Listeners
         pauseButton.onClick.AddListener(PauseGame);
         unPauseButton.onClick.AddListener(PauseGame);
@@ -34,7 +38,6 @@ public class GameUI : MonoBehaviour {
         sfxMute.onValueChanged.AddListener(delegate { AudioManager.instance.MuteSFX(); });
         musicVolume.onValueChanged.AddListener(delegate { AudioManager.instance.MusicVolume(musicVolume.value); });
         sfxVolume.onValueChanged.AddListener(delegate { AudioManager.instance.SFXVolume(sfxVolume.value); });
-
     }
 
     public void SetUIText()

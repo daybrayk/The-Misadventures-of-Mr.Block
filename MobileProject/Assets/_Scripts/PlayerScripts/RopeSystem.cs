@@ -44,6 +44,9 @@ public class RopeSystem : MonoBehaviour {
     public PolygonCollider2D attachedCollider;
     public float oldColliderPosition;
 
+    /*************** Audio Variables ***************/
+    public AudioClip ropeShoot;
+    public AudioClip ropeBreak;
     private void Awake()
     {
         ropeJoint.enabled = false;
@@ -127,6 +130,7 @@ public class RopeSystem : MonoBehaviour {
                                                          Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, ropeCutterMask);
             if (playerToNextAnchor.collider != null)
             {
+                AudioManager.instance.PlaySFX(ropeBreak);
                 _ropeIsCut = true;
                 ResetRope();
             }
@@ -227,6 +231,7 @@ public class RopeSystem : MonoBehaviour {
                 ropeJoint.enabled = true;
                 _ropeHingeAnchorSprite.enabled = true;
             }
+            AudioManager.instance.PlaySFX(ropeShoot);
             UpdateRopePositions();
         }
         //if the raycast doesn't hit anything disable the rope
@@ -343,12 +348,6 @@ public class RopeSystem : MonoBehaviour {
         return distanceDictionary.Any() ? distanceDictionary[sortedList.First()] : Vector2.zero;
     }
     #endregion
-
-    private void OnCollisionEnter2D(Collision2D c)
-    {
-        if (c.collider.tag == "Ground")
-            SceneManager.LoadScene("GameScene");
-    }
 
     /*************** Getters and Setters ***************/
     public bool ropeIsCut

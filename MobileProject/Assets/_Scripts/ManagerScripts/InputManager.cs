@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(!GameManager.instance.isPaused)
+        if (!GameManager.instance.isPaused)
         {
             if (Input.touchCount > 0)
             {
@@ -42,5 +42,7 @@ public class InputManager : MonoBehaviour {
                 }
             }
         }
+        else
+            Input.ResetInputAxes();
 	}
 }

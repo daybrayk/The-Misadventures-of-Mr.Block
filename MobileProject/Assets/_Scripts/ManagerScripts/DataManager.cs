@@ -48,8 +48,8 @@ public class DataManager : MonoBehaviour {
         PlayerPrefs.SetInt("currency", currency);
         PlayerPrefs.SetFloat("musicVol", AudioManager.instance.musicSource.volume);
         PlayerPrefs.SetFloat("sfxVol", AudioManager.instance.sfxSource.volume);
-        PlayerPrefs.SetInt("musicOnOff", AudioManager.instance.musicSource.mute ? 0 : 1);
-        PlayerPrefs.SetInt("sfxOnOff", AudioManager.instance.sfxSource.mute ? 0 : 1);
+        PlayerPrefs.SetInt("musicOnOff", AudioManager.instance.musicSource.mute == true ? 0 : 1);
+        PlayerPrefs.SetInt("sfxOnOff", AudioManager.instance.sfxSource.mute == true ? 0 : 1);
         PlayerPrefs.Save();
         _timer = 0f;
     }
@@ -71,8 +71,12 @@ public class DataManager : MonoBehaviour {
 
         if (PlayerPrefs.HasKey("musicOnOff"))
         {
-            AudioManager.instance.musicSource.mute = PlayerPrefs.GetInt("musicOnOff") != 0;
-            Debug.Log("Loaded Music On/Off: " + AudioManager.instance.musicSource.mute);
+            if (PlayerPrefs.GetInt("musicOnOff") == 0)
+            {
+                AudioManager.instance.musicSource.mute = true;
+            }
+            else
+                AudioManager.instance.musicSource.mute = false;
         }
 
         if (PlayerPrefs.HasKey("musicVol"))
@@ -83,7 +87,12 @@ public class DataManager : MonoBehaviour {
 
         if(PlayerPrefs.HasKey("sfxOnOff"))
         {
-            AudioManager.instance.sfxSource.mute = PlayerPrefs.GetInt("sfxOnOff") != 0;
+            if (PlayerPrefs.GetInt("sfxOnOff") == 0)
+            {
+                AudioManager.instance.sfxSource.mute = true;
+            }
+            else
+                AudioManager.instance.sfxSource.mute = false;
             Debug.Log("Loaded SFX On Off: " + AudioManager.instance.sfxSource.mute);
         }
 

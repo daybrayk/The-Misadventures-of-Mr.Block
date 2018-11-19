@@ -21,6 +21,7 @@ public class AudioManager : MonoBehaviour {
     {
         musicSource.clip = clip;
         musicSource.loop = loop;
+        musicSource.Play();
     }
 
     public void MusicVolume(float volume)
@@ -37,6 +38,7 @@ public class AudioManager : MonoBehaviour {
     {
         sfxSource.clip = clip;
         sfxSource.loop = loop;
+        sfxSource.Play();
     }
 
     public void SFXVolume(float volume)
