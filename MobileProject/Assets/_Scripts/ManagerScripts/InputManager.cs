@@ -9,38 +9,36 @@ public class InputManager : MonoBehaviour {
     Vector2 end = Vector2.zero;
     float beginTime = 0;
     float endTime = 0;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.touchCount > 0)
+        if(!GameManager.instance.isPaused)
         {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
+            if (Input.touchCount > 0)
             {
-                begin = touch.position;
-                beginTime = Time.time;
-            }
-            if (touch.phase == TouchPhase.Ended)
-            {
-                end = touch.position;
-                endTime = Time.time;
-                Debug.Log("Touch Time: " + (end - begin).magnitude);
-                Vector2 dif = end - begin;
-                if (dif.magnitude < 1f)
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
                 {
-                    rs.ShootHook(touch);
+                    begin = touch.position;
+                    beginTime = Time.time;
                 }
-                else
+                if (touch.phase == TouchPhase.Ended)
                 {
-                    if (dif.x > 0)
-                        pc.Dash(0);
+                    end = touch.position;
+                    endTime = Time.time;
+                    Debug.Log("Touch Time: " + (end - begin).magnitude);
+                    Vector2 dif = end - begin;
+                    if (dif.magnitude < 10f)
+                    {
+                        rs.ShootHook(touch);
+                    }
                     else
-                        pc.Dash(1);
+                    {
+                        if (dif.x > 0)
+                            pc.Dash(0);
+                        else
+                            pc.Dash(1);
+                    }
                 }
             }
         }

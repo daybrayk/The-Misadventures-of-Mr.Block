@@ -17,11 +17,15 @@ public class AudioManager : MonoBehaviour {
             DestroyImmediate(this.gameObject);
     }
 
-    public void PlayMusic(AudioClip clip, float volume = 1.0f, bool loop = true)
+    public void PlayMusic(AudioClip clip, bool loop = true)
     {
         musicSource.clip = clip;
-        musicSource.volume = volume;
         musicSource.loop = loop;
+    }
+
+    public void MusicVolume(float volume)
+    {
+        musicSource.volume = volume;
     }
 
     public void MuteMusic()
@@ -29,11 +33,16 @@ public class AudioManager : MonoBehaviour {
         musicSource.mute = !musicSource.mute;
     }
 
-    public void PlaySFX(AudioClip clip, float volume = 1.0f, bool loop = false)
+    public void PlaySFX(AudioClip clip, bool loop = false)
     {
         sfxSource.clip = clip;
-        sfxSource.volume = volume;
         sfxSource.loop = loop;
+    }
+
+    public void SFXVolume(float volume)
+    {
+        Debug.Log(volume);
+        sfxSource.volume = volume;
     }
 
     public void MuteSFX()

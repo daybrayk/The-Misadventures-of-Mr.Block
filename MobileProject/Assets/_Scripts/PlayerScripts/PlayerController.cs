@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
     public bool isMoving;
+    public GameUI gameUI;
     private Rigidbody2D rb;
     private float swingForce;
 	// Use this for initialization
@@ -32,7 +33,11 @@ public class PlayerController : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D c)
     {
-        if (c.tag == "GarbageCollector")
-            SceneManager.LoadScene("GameScene");
+        if (c.tag == "KillZone" || c.tag == "Ground")
+        {
+            gameUI.RemoveSubscriber();
+            DataManager.instance.SaveGameData();
+            GameManager.instance.LoadScene("TitleScene");
+        }
     }
 }
