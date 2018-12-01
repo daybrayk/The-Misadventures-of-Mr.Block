@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour {
     public RopeSystem rs;
@@ -14,7 +15,7 @@ public class InputManager : MonoBehaviour {
 	void Update () {
         if (!GameManager.instance.isPaused)
         {
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
             {
                 Touch touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)

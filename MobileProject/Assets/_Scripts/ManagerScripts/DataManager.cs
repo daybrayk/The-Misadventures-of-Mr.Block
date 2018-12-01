@@ -71,12 +71,7 @@ public class DataManager : MonoBehaviour {
 
         if (PlayerPrefs.HasKey("musicOnOff"))
         {
-            if (PlayerPrefs.GetInt("musicOnOff") == 0)
-            {
-                AudioManager.instance.musicSource.mute = true;
-            }
-            else
-                AudioManager.instance.musicSource.mute = false;
+            AudioManager.instance.musicSource.mute = PlayerPrefs.GetInt("musicOnOff") == 0 ? true : false;
         }
 
         if (PlayerPrefs.HasKey("musicVol"))
@@ -87,12 +82,7 @@ public class DataManager : MonoBehaviour {
 
         if(PlayerPrefs.HasKey("sfxOnOff"))
         {
-            if (PlayerPrefs.GetInt("sfxOnOff") == 0)
-            {
-                AudioManager.instance.sfxSource.mute = true;
-            }
-            else
-                AudioManager.instance.sfxSource.mute = false;
+            AudioManager.instance.sfxSource.mute = PlayerPrefs.GetInt("sfxOnOff") == 0 ? true : false;
             Debug.Log("Loaded SFX On Off: " + AudioManager.instance.sfxSource.mute);
         }
 
