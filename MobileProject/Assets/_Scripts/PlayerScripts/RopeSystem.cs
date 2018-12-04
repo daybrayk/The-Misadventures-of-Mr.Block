@@ -220,7 +220,7 @@ public class RopeSystem : MonoBehaviour {
         if (hit = Physics2D.Raycast(_playerPosition, /*aimDirection*/ shootDirection, ROPEMAXDISTANCE, grappleMask))
         {
             attachedCollider = (PolygonCollider2D)hit.collider;
-            oldColliderPosition = attachedCollider.transform.position.y;
+            //oldColliderPosition = attachedCollider.transform.position.y;
             ropeRenderer.enabled = true;
             _ropeAttached = true;
             if (!ropePositions.Contains(hit.point))
@@ -268,7 +268,7 @@ public class RopeSystem : MonoBehaviour {
         /*if(!_ropeAttached)
             return;*/
         //Update rope positions and wrap positions if the player is being carried upwards by a block
-        if (attachedCollider.transform.position.y - oldColliderPosition > 0)
+        /*if (attachedCollider.transform.position.y - oldColliderPosition > 0)
         {
             for (int i = 0; i < ropePositions.Count; i++)
             {
@@ -282,7 +282,7 @@ public class RopeSystem : MonoBehaviour {
                 else
                     ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + attachedCollider.transform.position.y - oldColliderPosition);
             }
-        }else if(ropePositions.Count > 1)
+        }else*/ if(ropePositions.Count > 1)
         {
             for (int i = 1; i < ropePositions.Count; i++)
             {
@@ -331,7 +331,7 @@ public class RopeSystem : MonoBehaviour {
             {
                 ropeRenderer.SetPosition(i, transform.position);
             }
-            oldColliderPosition = attachedCollider.transform.position.y;
+            //oldColliderPosition = attachedCollider.transform.position.y;
         }
     }
 

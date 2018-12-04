@@ -12,8 +12,8 @@ public class WorldMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float y = transform.position.y + (moveSpeed * Time.deltaTime);
-        transform.position = new Vector3(transform.position.x, y, 0);
+        float x = transform.position.x - (moveSpeed * Time.deltaTime);
+        transform.position = new Vector3(x, transform.position.y, 0);
 	}
 
     private void OnTriggerEnter2D(Collider2D c)

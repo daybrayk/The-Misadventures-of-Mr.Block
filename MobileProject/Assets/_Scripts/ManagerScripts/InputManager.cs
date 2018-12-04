@@ -31,13 +31,15 @@ public class InputManager : MonoBehaviour {
                     if (dif.magnitude < 10f)
                     {
                         rs.ShootHook(touch);
+                        pc.dash = true;
                     }
-                    else
+                    else if (pc.dash)
                     {
                         if (dif.x > 0)
                             pc.Dash(0);
                         else
                             pc.Dash(1);
+                        pc.dash = false;
                     }
                 }
             }

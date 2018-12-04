@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
     public Transform player;
-	// Use this for initialization
-	void Start () {
-		
-	}
+    float playerOffset;
+    private float _lastPosition;
+    public RoofSpawn rs;
+    // Use this for initialization
+    void Start () {
+        playerOffset = transform.position.x - player.position.x;
+        _lastPosition = transform.position.x;
+    }
 
     private void FixedUpdate()
     {
-        transform.position = new Vector3(player.position.x + 1.95f, 0, -10);
+        transform.position = new Vector3(Mathf.Clamp(player.position.x + playerOffset, transform.position.x, float.MaxValue), 0, -10);
+        if(transform.position.x - _lastPosition >= 1.275f)
+        {
+            rs.SpawnRoof();
+            _lastPosition = transform.position.x;
+        }
     }
 }

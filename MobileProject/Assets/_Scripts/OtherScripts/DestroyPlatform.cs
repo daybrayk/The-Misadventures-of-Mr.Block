@@ -13,7 +13,7 @@ public class DestroyPlatform : MonoBehaviour {
 	void Update () {
         if (Input.touchCount > 0)
         {
-            DataManager.instance.scoreStart = true;
+            GameManager.instance.scoreStart = true;
             Destroy(gameObject);
         }
 	}

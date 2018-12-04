@@ -16,21 +16,25 @@ public class GameUI : MonoBehaviour {
 
     private void Awake()
     {
-        musicMute.isOn = !AudioManager.instance.musicSource.mute;
-        sfxMute.isOn = !AudioManager.instance.sfxSource.mute;
-        musicVolume.value = AudioManager.instance.musicSource.volume;
-        sfxVolume.value = AudioManager.instance.sfxSource.volume;
-        DataManager.scoreChange += SetUIText;
+        //musicMute.isOn = !AudioManager.instance.musicSource.mute;
+        //sfxMute.isOn = !AudioManager.instance.sfxSource.mute;
+        //musicVolume.value = AudioManager.instance.musicSource.volume;
+        //sfxVolume.value = AudioManager.instance.sfxSource.volume;
+        //DataManager.scoreChange += SetUIText;
+        GameManager.scoreChange += SetUIText;
     }
 
     private void Start()
     {
-        DataManager.instance.LoadGameData();
+        GameManager.instance.LoadGame();
+        //DataManager.instance.LoadGameData();
         musicMute.isOn = AudioManager.instance.musicSource.mute;
         sfxMute.isOn = AudioManager.instance.sfxSource.mute;
+        musicVolume.value = AudioManager.instance.musicSource.volume;
+        sfxVolume.value = AudioManager.instance.sfxSource.volume;
         AudioManager.instance.musicSource.Play();
         SetUIText();
-        AudioManager.instance.musicSource.Play();
+        //AudioManager.instance.musicSource.Play();
         //Setup Listeners
         pauseButton.onClick.AddListener(PauseGame);
         unPauseButton.onClick.AddListener(PauseGame);
@@ -42,14 +46,14 @@ public class GameUI : MonoBehaviour {
 
     public void SetUIText()
     {
-        scoreText.text = "Score: " + DataManager.instance.score;
-        highScoreText.text = "HighScore: " + DataManager.instance.highScore;
+        scoreText.text = "Score: " + GameManager.instance.score;
+        highScoreText.text = "HighScore: " + GameManager.instance.highScore;
         //currencyText.text = "Currency: " + .currency;
     }
 
     public void RemoveSubscriber()
     {
-        DataManager.scoreChange -= SetUIText;
+        GameManager.scoreChange -= SetUIText;
     }
 
     public void PauseGame()
@@ -68,5 +72,6 @@ public class GameUI : MonoBehaviour {
         GameManager.instance.isPaused = false;
         AudioManager.instance.musicSource.UnPause();
         AudioManager.instance.sfxSource.UnPause();
+        GameManager.instance.SaveGame();
     }
 }
