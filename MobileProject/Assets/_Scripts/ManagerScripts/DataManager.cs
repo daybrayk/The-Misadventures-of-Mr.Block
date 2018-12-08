@@ -48,8 +48,21 @@ public static class DataManager {
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
-
-            PersistentData data = formatter.Deserialize(stream) as PersistentData;
+            PersistentData data = new PersistentData();
+            try
+            {
+                data = formatter.Deserialize(stream) as PersistentData;
+            }catch (System.TypeLoadException e)
+            {
+                Debug.LogError("Programmer Error: Class type - " + data.GetType() + "does not match class type in persistent data file at - " + path +
+                	"\n<color=red>deleting persistent data file:</color> " + path +"\nFunction returning new PersistentData class!" +
+                    "\n<color=red>Stack Trace:</color> " + e);
+                File.Delete(path);
+            }catch(System.Exception e)
+            {
+                Debug.LogError("<color=yellow>Programmer Error:</color> Exception thrown from LoadGame() function in DataManager class\n" +
+                	"<color=red>Stack Trace:</color> " + e);
+            }
             stream.Close();
             return data;
 

@@ -48,6 +48,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Obstacle
+    uniqueID: 3794674671
+    locked: 0
   - name: Terrain
     uniqueID: 2672535351
     locked: 0

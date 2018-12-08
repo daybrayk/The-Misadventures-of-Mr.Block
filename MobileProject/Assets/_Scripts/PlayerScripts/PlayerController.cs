@@ -28,6 +28,17 @@ public class PlayerController : MonoBehaviour {
                 break;
         }
     }
+
+    public void Squish()
+    {
+        GameManager.instance.LoadScene("TitleScene");
+    }
+
+    public void Slice()
+    {
+
+    }
+
     private void OnTriggerEnter2D(Collider2D c)
     {
         if (c.tag == "KillZone" || c.tag == "Ground")

@@ -17,7 +17,7 @@ public struct JointInfo
 
 public class RopeSystem : MonoBehaviour {
     /*************** Constant Variables ***************/
-    private const float ROPEMAXDISTANCE = 5.0f;
+    private const float ROPEMAXDISTANCE = 9.0f;
 
     /*************** Public Variables ***************/
     public GameObject ropeHingeAnchor;
@@ -282,7 +282,7 @@ public class RopeSystem : MonoBehaviour {
                 else
                     ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + attachedCollider.transform.position.y - oldColliderPosition);
             }
-        }else*/ if(ropePositions.Count > 1)
+        }else if(ropePositions.Count > 1)
         {
             for (int i = 1; i < ropePositions.Count; i++)
             {
@@ -296,7 +296,7 @@ public class RopeSystem : MonoBehaviour {
                 else
                     ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + Time.deltaTime);
             }
-        }
+        }*/
         ropeRenderer.positionCount = ropePositions.Count + 1;
 
         for (int i = ropeRenderer.positionCount - 1; i >= 0; i--)

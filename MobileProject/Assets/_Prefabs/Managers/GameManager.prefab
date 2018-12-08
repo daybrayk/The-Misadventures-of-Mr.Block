@@ -51,6 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9498d6d516914c1f82259476283f7b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameStart: 0
-  time: 0
-  score: 0
+  scoreStart: 0
+  highScore: 0
