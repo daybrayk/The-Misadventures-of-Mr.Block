@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour {
 	void Update () {
         if (!GameManager.instance.isPaused)
         {
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
             {
                 Touch touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(touch.fingerId))
