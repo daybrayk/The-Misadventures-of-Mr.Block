@@ -413,6 +413,79 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 263354876}
+--- !u!1 &362906886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 362906888}
+  - component: {fileID: 362906887}
+  m_Layer: 0
+  m_Name: Half_Filled_Eye
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &362906887
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 362906886}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 190217859
+  m_SortingLayer: 3
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300012, guid: 8b89e227f12744cada9b8fec324c279b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.28, y: 1.28}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+--- !u!4 &362906888
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 362906886}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.23, y: -1.1771152, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &367915872
 Prefab:
   m_ObjectHideFlags: 0
@@ -813,8 +886,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1081936371}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.539132, y: 2.78, z: -0.08839728}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
+  m_LocalPosition: {x: -6.95, y: -0.81, z: -0.08839728}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 1728968772}
   m_Father: {fileID: 1327038840}
@@ -1627,7 +1700,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1263783328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1639,13 +1712,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c4a45fa90c3a47239c2fcb311345a78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainSpawners:
-  - {fileID: 368029613}
-  - {fileID: 919285385}
-  - {fileID: 1579780508}
-  - {fileID: 472684705}
-  terrain: {fileID: 1831936600374970, guid: e3986193e9aed48f6bf931562af34e0a, type: 2}
-  ropeCutter: {fileID: 1812718564086668, guid: 90736d2914e884605b5985c3b5b9d7a1, type: 2}
+  obstacleSpawners: []
+  player: {fileID: 0}
+  singleGOTopTop: []
+  singleGOTop: []
+  compoundGO: []
+  singleGOBot: []
+  singleGOBotBot: []
 --- !u!4 &1263783329
 Transform:
   m_ObjectHideFlags: 0
@@ -2970,11 +3043,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -8.529133
+      value: -6.9400005
       objectReference: {fileID: 0}
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.1887305
+      value: -2.56
       objectReference: {fileID: 0}
     - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
       propertyPath: m_LocalPosition.z
@@ -3004,6 +3077,14 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4845327098149526, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 3.51
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a1b788f85f50248539ecbe808ad95fd9, type: 2}
@@ -3237,7 +3318,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 541096174}
-  rs: {fileID: 0}
 --- !u!81 &2131359071
 AudioListener:
   m_ObjectHideFlags: 0

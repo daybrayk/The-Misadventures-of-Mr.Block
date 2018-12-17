@@ -8,6 +8,7 @@ TagManager:
   - RopeCutter
   - GarbageCollector
   - KillZone
+  - FrontTile
   layers:
   - Default
   - TransparentFX

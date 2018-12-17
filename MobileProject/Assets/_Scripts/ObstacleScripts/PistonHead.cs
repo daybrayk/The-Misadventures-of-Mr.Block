@@ -10,6 +10,8 @@ public class PistonHead : MonoBehaviour {
 	void Start () {
         if (!otherHead)
             Debug.Log("<color=red>Programmer Error:</color> Reference to other piston head is missing on Game Object: " + name);
+        if (!cc)
+            cc = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 	}
 	
 	// Update is called once per frame

@@ -6,13 +6,17 @@ using UnityEngine.EventSystems;
 public class InputManager : MonoBehaviour {
     public RopeSystem rs;
     public PlayerController pc;
+    Animator anim;
     Vector2 begin = Vector2.zero;
     Vector2 end = Vector2.zero;
     float beginTime = 0;
     float endTime = 0;
-	
-	// Update is called once per frame
-	void Update () {
+    private void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
+    // Update is called once per frame
+    void Update () {
         if (!GameManager.instance.isPaused)
         {
             if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
@@ -34,13 +38,20 @@ public class InputManager : MonoBehaviour {
                         rs.ShootHook(touch);
                         pc.dash = true;
                     }
-                    else if (pc.dash)
+                    else if (pc.dash && rs.ropeAttached)
                     {
+                        Debug.Log("Dash");
                         if (dif.x > 0)
+                        {
                             pc.Dash(0);
+                        }
                         else
                             pc.Dash(1);
                         pc.dash = false;
+                    } 
+                    else if(!rs.ropeAttached)
+                    {
+                        anim.SetTrigger("FreeDash");
                     }
                 }
             }

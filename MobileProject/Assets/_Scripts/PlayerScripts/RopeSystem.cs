@@ -28,6 +28,7 @@ public class RopeSystem : MonoBehaviour {
     public PlayerController playerController;
     public Camera main;
     public LayerMask grappleMask;
+    public LayerMask ropeWrapMask;
     public LayerMask ropeCutterMask;
     public LineRenderer ropeRenderer;
 
@@ -62,18 +63,6 @@ public class RopeSystem : MonoBehaviour {
         //update reference to players position
         _playerPosition = transform.position;
 
-        /*if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !_ropeIsCut)
-        {
-            Vector2 touchPosition = main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            Vector2 aimDirection = touchPosition - new Vector2(transform.position.x, transform.position.y);
-            float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
-
-            if (aimAngle < 0f)
-                aimAngle = Mathf.PI * 2 + aimAngle;
-            Vector3 shootDirection = Quaternion.Euler(0, 0, aimAngle * Mathf.Rad2Deg) * Vector2.right;
-
-            ShootHook(shootDirection);
-        }*/
         if (attachedCollider == null)
             ResetRope();
         if (_ropeAttached)
@@ -101,7 +90,7 @@ public class RopeSystem : MonoBehaviour {
              * the anchor point
             */
             RaycastHit2D playerToNextAnchor = Physics2D.Raycast(_playerPosition, (lastRopePoint - _playerPosition).normalized,
-                                                         Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, grappleMask);
+                                                         Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, ropeWrapMask);
             //if the raycast hits a grapple point retrieve the new closest point and add an anchor point there
             if (playerToNextAnchor.collider != null)
             {
@@ -353,6 +342,11 @@ public class RopeSystem : MonoBehaviour {
     public bool ropeIsCut
     {
         get { return _ropeIsCut; }
+    }
+
+    public bool ropeAttached
+    {
+        get { return _ropeAttached; }
     }
 
 }
