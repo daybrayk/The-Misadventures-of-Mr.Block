@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RoofMove : MonoBehaviour {
     public static GameObject frontTile;
+    public Transform camera;
 	// Use this for initialization
 	void Start () {
         frontTile = GameObject.FindWithTag("FrontTile");
@@ -11,14 +12,9 @@ public class RoofMove : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "GarbageCollector")
+        if (camera.position.x - transform.position.x > 9.8f)
         {
-            transform.position = new Vector2(frontTile.transform.position.x + 1.27f, frontTile.transform.position.y);
+            transform.position = new Vector2(frontTile.transform.position.x + 1.25f, transform.position.y);
             frontTile = gameObject;
         }
     }
