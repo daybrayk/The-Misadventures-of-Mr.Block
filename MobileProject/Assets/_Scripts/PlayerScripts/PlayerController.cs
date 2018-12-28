@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     public GameUI gameUI;
     private Rigidbody2D rb;
     private float swingForce;
+    private float dashForce;
     RopeSystem rs;
 	// Use this for initialization
 	void Start () {
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour {
         if (!rb)
             rb = GetComponent<Rigidbody2D>();
         rs = GetComponent<RopeSystem>();
+        if (dashForce <= 0)
+            dashForce = 6.0f;
 	}
 
     public void Dash(int direction)
@@ -31,6 +34,9 @@ public class PlayerController : MonoBehaviour {
             case 1:
                 //rb.AddRelativeForce(Vector2.left * swingForce, ForceMode2D.Impulse);
                 rb.AddRelativeForce(-perp, ForceMode2D.Impulse);
+                break;
+            case 2:
+                rb.AddRelativeForce(transform.right * dashForce, ForceMode2D.Impulse);
                 break;
         }
     }

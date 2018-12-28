@@ -10,6 +10,7 @@ public class CameraFollow : MonoBehaviour {
         playerOffset = transform.position.x - player.position.x;
     }
 
+
     private void FixedUpdate()
     {
         transform.position = new Vector3(Mathf.Clamp(player.position.x + playerOffset, transform.position.x, float.MaxValue), 0, -10);

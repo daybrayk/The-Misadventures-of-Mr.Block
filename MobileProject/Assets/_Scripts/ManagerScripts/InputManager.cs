@@ -11,9 +11,11 @@ public class InputManager : MonoBehaviour {
     Vector2 end = Vector2.zero;
     float beginTime = 0;
     float endTime = 0;
+    float minSwipeDistance;
     private void Start()
     {
         anim = GetComponent<Animator>();
+        minSwipeDistance = Screen.width * 10 / 100; //Minimum swipe distance is 10% of the screen's width
     }
     // Update is called once per frame
     void Update () {
@@ -31,9 +33,8 @@ public class InputManager : MonoBehaviour {
                 {
                     end = touch.position;
                     endTime = Time.time;
-                    Debug.Log("Touch Time: " + (end - begin).magnitude);
                     Vector2 dif = end - begin;
-                    if (dif.magnitude < 10f)
+                    if (dif.magnitude < minSwipeDistance)
                     {
                         rs.ShootHook(touch);
                         pc.dash = true;
@@ -51,6 +52,7 @@ public class InputManager : MonoBehaviour {
                     } 
                     else if(!rs.ropeAttached)
                     {
+                        pc.Dash(2);
                         anim.SetTrigger("FreeDash");
                     }
                 }

@@ -25,9 +25,10 @@ public class GameManager : MonoBehaviour
         {
             DestroyImmediate(gameObject);
         }
-
+    }
+    private void Start()
+    {
         LoadGame();
-
     }
 
     private void Update()
@@ -42,7 +43,6 @@ public class GameManager : MonoBehaviour
         if (_scoreTimer > 2.0f && scoreStart)
         {
             score += 1;
-            Debug.Log(score);
             _scoreTimer = 0;
         }
     }
@@ -71,10 +71,16 @@ public class GameManager : MonoBehaviour
     {
         PersistentData data = DataManager.LoadGame();
         highScore = data.highScore;
-        AudioManager.instance.musicSource.volume = data.musicVolume;
-        AudioManager.instance.sfxSource.volume = data.sfxVolume;
-        AudioManager.instance.musicSource.mute = data.musicOnOff;
-        AudioManager.instance.sfxSource.mute = data.sfxOnOff;
+        if (AudioManager.instance)
+        {
+            AudioManager.instance.musicSource.volume = data.musicVolume;
+            AudioManager.instance.sfxSource.volume = data.sfxVolume;
+            AudioManager.instance.musicSource.mute = data.musicOnOff;
+            AudioManager.instance.sfxSource.mute = data.sfxOnOff;
+        }
+        else
+            Debug.Log("<color=red>AudioManager instance does not exist</color>");
+
     }
 
     /*************** Getters and Setters ***************/
