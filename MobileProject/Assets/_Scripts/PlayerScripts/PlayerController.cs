@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private float swingForce;
     private float dashForce;
+    [SerializeField]
+    private float[] gravityTier;
     RopeSystem rs;
 	// Use this for initialization
 	void Start () {
@@ -19,7 +21,18 @@ public class PlayerController : MonoBehaviour {
         rs = GetComponent<RopeSystem>();
         if (dashForce <= 0)
             dashForce = 6.0f;
+        if(gravityTier.Length == 0)
+            gravityTier = new float[3] { 1f, 2.5f, 5f };
 	}
+    #region Dynamic Gravity Update
+    private void FixedUpdate()
+    {
+        if(rb.velocity.y > 15.0f)
+            rb.velocity += Vector2.up * Physics2D.gravity.y * gravityTier[2] * Time.fixedDeltaTime;
+        else if(rb.velocity.y > 10.0f && rb.velocity.y < 15.0f)
+            rb.velocity += Vector2.up * Physics.gravity.y * gravityTier[1] * Time.fixedDeltaTime;
+    }
+    #endregion
 
     public void Dash(int direction)
     {
@@ -40,6 +53,14 @@ public class PlayerController : MonoBehaviour {
                 break;
         }
     }
+    #region Dynamic Gravity Update
+    public void Swing(Vector2 ropeDir)
+    {
+        Vector2 swingDir = new Vector2(ropeDir.y, -ropeDir.x).normalized;
+        rb.velocity = swingDir * rb.velocity.magnitude;
+    }
+    #endregion
+
 
     public void Squish()
     {

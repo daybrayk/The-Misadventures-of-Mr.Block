@@ -202,6 +202,9 @@ public class RopeSystem : MonoBehaviour {
         if (aimAngle < 0f)
             aimAngle = Mathf.PI * 2 + aimAngle;
         Vector3 shootDirection = Quaternion.Euler(0, 0, aimAngle * Mathf.Rad2Deg) * Vector2.right;
+        #region Dynamic Gravity Update
+        playerController.Swing(shootDirection);
+        #endregion
         //if the rope is already attached then detach the rope and exit the function
 
 
