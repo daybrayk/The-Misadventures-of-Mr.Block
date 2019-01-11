@@ -61,7 +61,7 @@ public class TerrainSpawn : MonoBehaviour {
         {
             int num = Random.Range(0, 5);
             currentlyActive.SetActive(false);
-            Debug.Log(singleGOBot.Count + " " + singleGOTop.Count + " " + singleGOBotBot.Count + " " + singleGOTopTop.Count);
+            //Debug.Log(singleGOBot.Count + " " + singleGOTop.Count + " " + singleGOBotBot.Count + " " + singleGOTopTop.Count);
             switch(num)
             {
                 case 0:

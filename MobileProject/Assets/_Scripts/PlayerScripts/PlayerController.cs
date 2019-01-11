@@ -22,15 +22,15 @@ public class PlayerController : MonoBehaviour {
         if (dashForce <= 0)
             dashForce = 6.0f;
         if(gravityTier.Length == 0)
-            gravityTier = new float[3] { 1f, 2.5f, 5f };
+            gravityTier = new float[3] { 2.5f, 5f, 10f };
 	}
     #region Dynamic Gravity Update
     private void FixedUpdate()
     {
-        if(rb.velocity.y > 15.0f)
-            rb.velocity += Vector2.up * Physics2D.gravity.y * gravityTier[2] * Time.fixedDeltaTime;
-        else if(rb.velocity.y > 10.0f && rb.velocity.y < 15.0f)
-            rb.velocity += Vector2.up * Physics.gravity.y * gravityTier[1] * Time.fixedDeltaTime;
+        if(rb.velocity.y > 10.0f)
+            rb.velocity += Vector2.up * Physics2D.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
+        else if(rb.velocity.y > 5.0f && rb.velocity.y < 10.0f)
+            rb.velocity += Vector2.up * Physics.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
     }
     #endregion
 

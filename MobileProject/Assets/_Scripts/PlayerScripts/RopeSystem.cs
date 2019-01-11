@@ -35,7 +35,7 @@ public class RopeSystem : MonoBehaviour {
     /*************** Member Variables ***************/
     private bool _ropeAttached;
     private bool _distanceSet;
-    private bool _ropeIsCut;
+    //private bool _ropeIsCut;
     private int ropeWrapCount;
     private Vector2 _playerPosition;
     private Rigidbody2D _ropeHingeAnchorRb;
@@ -113,16 +113,18 @@ public class RopeSystem : MonoBehaviour {
                 }
                 return;
             }
-
+            #region Ropecutter code
+            /*
             //if the raycast hits a Rope Cutter obstacle we reset the rope
             playerToNextAnchor = Physics2D.Raycast(_playerPosition, (lastRopePoint - _playerPosition).normalized,
-                                                         Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, ropeCutterMask);
+                                                   Vector2.Distance(_playerPosition, lastRopePoint) - 0.1f, ropeCutterMask);
             if (playerToNextAnchor.collider != null)
             {
                 AudioManager.instance.PlaySFX(ropeBreak);
                 _ropeIsCut = true;
                 ResetRope();
-            }
+            }*/
+            #endregion
 
 
         }
@@ -202,15 +204,16 @@ public class RopeSystem : MonoBehaviour {
         if (aimAngle < 0f)
             aimAngle = Mathf.PI * 2 + aimAngle;
         Vector3 shootDirection = Quaternion.Euler(0, 0, aimAngle * Mathf.Rad2Deg) * Vector2.right;
-        #region Dynamic Gravity Update
-        playerController.Swing(shootDirection);
-        #endregion
         //if the rope is already attached then detach the rope and exit the function
 
 
         //if the raycast hits something enable the rope and add the anchor point to the ropePositions list
         if (hit = Physics2D.Raycast(_playerPosition, /*aimDirection*/ shootDirection, ROPEMAXDISTANCE, grappleMask))
         {
+            #region Dynamic Gravity Update
+            playerController.Swing(shootDirection);
+            #endregion
+
             attachedCollider = (PolygonCollider2D)hit.collider;
             //oldColliderPosition = attachedCollider.transform.position.y;
             ropeRenderer.enabled = true;
@@ -256,6 +259,7 @@ public class RopeSystem : MonoBehaviour {
 
     private void UpdateRopePositions()
     {
+        #region Old Code
         //if the rope isn't attached then don't do anything
         /*if(!_ropeAttached)
             return;*/
@@ -289,6 +293,8 @@ public class RopeSystem : MonoBehaviour {
                     ropePositions[i] = new Vector2(ropePositions[i].x, ropePositions[i].y + Time.deltaTime);
             }
         }*/
+        #endregion
+
         ropeRenderer.positionCount = ropePositions.Count + 1;
 
         for (int i = ropeRenderer.positionCount - 1; i >= 0; i--)
@@ -342,10 +348,10 @@ public class RopeSystem : MonoBehaviour {
     #endregion
 
     /*************** Getters and Setters ***************/
-    public bool ropeIsCut
+    /*public bool ropeIsCut
     {
         get { return _ropeIsCut; }
-    }
+    }*/
 
     public bool ropeAttached
     {
