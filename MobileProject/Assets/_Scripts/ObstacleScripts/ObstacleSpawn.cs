@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainSpawn : MonoBehaviour {
+public class ObstacleSpawn : MonoBehaviour {
     /*************** Reference Variables ***************/
     public List<Transform> obstacleSpawners;
     public Transform player;

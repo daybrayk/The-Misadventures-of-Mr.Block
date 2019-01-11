@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SmallBlade : MonoBehaviour {
-    public Transform t;
     public float rotationalVel;
     public float moveSpeed;
 
 	// Use this for initialization
 	void Start () {
-        t = GetComponent<Transform>();
         if (moveSpeed <= 0)
             moveSpeed = 5.0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        t.eulerAngles = new Vector3(0, 0, t.eulerAngles.z + (rotationalVel * Time.deltaTime));
-        t.position = new Vector3(t.position.x - (moveSpeed * Time.deltaTime), t.position.y, t.position.z);
+        transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + (rotationalVel * Time.deltaTime));
+        transform.position = new Vector3(transform.position.x - (moveSpeed * Time.deltaTime), transform.position.y, transform.position.z);
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
