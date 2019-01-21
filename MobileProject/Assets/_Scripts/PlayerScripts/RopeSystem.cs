@@ -17,7 +17,7 @@ public struct JointInfo
 
 public class RopeSystem : MonoBehaviour {
     /*************** Constant Variables ***************/
-    private const float ROPEMAXDISTANCE = 9.0f;
+    private const float ROPEMAXDISTANCE = 10.0f;
 
     /*************** Public Variables ***************/
     public GameObject ropeHingeAnchor;
@@ -196,8 +196,10 @@ public class RopeSystem : MonoBehaviour {
             ResetRope();
             return;
         }
+
         RaycastHit2D hit;
         Vector2 touchPosition = main.ScreenToWorldPoint(/*Input.GetTouch(0)*/touch.position);
+        touchPosition.y = 5.0f;
         Vector2 aimDirection = touchPosition - new Vector2(transform.position.x, transform.position.y);
         float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
 

@@ -41,7 +41,7 @@ public class InputManager : MonoBehaviour {
                     }
                     else if (pc.dash && rs.ropeAttached)
                     {
-                        Debug.Log("Dash");
+                        //Debug.Log("Dash");
                         if (dif.x > 0)
                         {
                             pc.Dash(0);
@@ -52,8 +52,10 @@ public class InputManager : MonoBehaviour {
                     } 
                     else if(!rs.ropeAttached)
                     {
-                        pc.Dash(2);
-                        anim.SetTrigger("FreeDash");
+                        if (dif.x > 0)
+                            pc.Dash(2);
+                        else
+                            pc.Dash(3);
                     }
                 }
             }

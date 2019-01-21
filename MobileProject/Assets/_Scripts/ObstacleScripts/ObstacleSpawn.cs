@@ -26,7 +26,7 @@ public class ObstacleSpawn : MonoBehaviour {
         lastPosition = playerPosition;
 
         int num = Random.Range(0, 5);
-        currentlyActive = PlaceAndActivate(obstacles[Random.Range(0, obstacles.Count)], spawnerLocation);
+        //currentlyActive = PlaceAndActivate(obstacles[Random.Range(0, obstacles.Count)], spawnerLocation);
     }
 	
 	// Update is called once per frame
@@ -35,7 +35,8 @@ public class ObstacleSpawn : MonoBehaviour {
         if((playerPosition.x - lastPosition.x) >= 25.0f)
         {
             int num = Random.Range(0, 5);
-            currentlyActive.SetActive(false);
+            if(currentlyActive)
+                currentlyActive.SetActive(false);
             currentlyActive = PlaceAndActivate(obstacles[Random.Range(0, obstacles.Count)], spawnerLocation);
             lastPosition = playerPosition;
         }

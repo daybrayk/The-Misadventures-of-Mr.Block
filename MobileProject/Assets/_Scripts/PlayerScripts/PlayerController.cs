@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
-    public enum DashStates { ready=0, dashing, cooldown}
     public bool isMoving;
-    public DashStates dashState = DashStates.ready;
     public bool dash;
     public GameUI gameUI;
     private Rigidbody2D rb;
     private float swingForce;
     private float dashForce;
-    private float dashLength;
     [SerializeField]
     private float[] gravityTier;
     RopeSystem rs;
@@ -27,6 +24,7 @@ public class PlayerController : MonoBehaviour {
         if(gravityTier.Length == 0)
             gravityTier = new float[3] { 2.5f, 5f, 10f };
 	}
+
     #region Dynamic Gravity Update
     private void FixedUpdate()
     {
@@ -34,14 +32,6 @@ public class PlayerController : MonoBehaviour {
             rb.velocity += Vector2.up * Physics2D.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
         else if(rb.velocity.y > 5.0f && rb.velocity.y < 10.0f)
             rb.velocity += Vector2.up * Physics.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
-        if(dashState == DashStates.dashing)
-        {
-            rb.velocity = new Vector2(10, 2);
-        }else if(dashLength < Mathf.Epsilon)
-        {
-            dashState = DashStates.cooldown;
-            dashLength = 1.0f;
-        }
     }
     #endregion
 
@@ -52,15 +42,16 @@ public class PlayerController : MonoBehaviour {
         //rb.velocity = new Vector2(rb.velocity.x, 0);
         switch(direction){
             case 0:
-                //rb.AddRelativeForce(Vector2.right * swingForce, ForceMode2D.Impulse);
                 rb.AddRelativeForce(perp, ForceMode2D.Impulse);
                 break;
             case 1:
-                //rb.AddRelativeForce(Vector2.left * swingForce, ForceMode2D.Impulse);
                 rb.AddRelativeForce(-perp, ForceMode2D.Impulse);
                 break;
             case 2:
                 rb.AddRelativeForce(transform.right * dashForce, ForceMode2D.Impulse);
+                break;
+            case 3:
+                rb.AddRelativeForce(-transform.right * dashForce, ForceMode2D.Impulse);
                 break;
         }
     }
