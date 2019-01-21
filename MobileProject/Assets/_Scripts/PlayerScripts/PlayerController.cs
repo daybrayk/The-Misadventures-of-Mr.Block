@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
+    public enum DashStates { ready=0, dashing, cooldown}
     public bool isMoving;
+    public DashStates dashState = DashStates.ready;
     public bool dash;
     public GameUI gameUI;
     private Rigidbody2D rb;
     private float swingForce;
     private float dashForce;
+    private float dashLength;
     [SerializeField]
     private float[] gravityTier;
     RopeSystem rs;
@@ -31,6 +34,14 @@ public class PlayerController : MonoBehaviour {
             rb.velocity += Vector2.up * Physics2D.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
         else if(rb.velocity.y > 5.0f && rb.velocity.y < 10.0f)
             rb.velocity += Vector2.up * Physics.gravity.y * gravityTier[0] * Time.fixedDeltaTime;
+        if(dashState == DashStates.dashing)
+        {
+            rb.velocity = new Vector2(10, 2);
+        }else if(dashLength < Mathf.Epsilon)
+        {
+            dashState = DashStates.cooldown;
+            dashLength = 1.0f;
+        }
     }
     #endregion
 

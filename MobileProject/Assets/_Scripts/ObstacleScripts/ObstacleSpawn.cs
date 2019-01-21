@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObstacleSpawn : MonoBehaviour {
     /*************** Reference Variables ***************/
-    public List<Transform> obstacleSpawners;
+    public Transform spawnerLocation;
     public Transform player;
    
     /*************** Obstacle Spawn Variables ***************/
@@ -17,16 +17,8 @@ public class ObstacleSpawn : MonoBehaviour {
     private float diagonalTimer;
 
     /*************** Obstacles ***************/
-    public List<GameObject> singleGOTopTop;
-    public List<GameObject> singleGOTop;
-    public List<GameObject> compoundGO;
-    public List<GameObject> singleGOBot;
-    public List<GameObject> singleGOBotBot;
+    public List<GameObject> obstacles;
     private GameObject currentlyActive;
-
-    /*************** Old Variables ***************/
-    private float spawnTime = 2.0f;
-    private float spawnTimer;
 
     // Use this for initialization
     void Start () {
@@ -34,24 +26,7 @@ public class ObstacleSpawn : MonoBehaviour {
         lastPosition = playerPosition;
 
         int num = Random.Range(0, 5);
-        switch (num)
-        {
-            case 0:
-                currentlyActive = PlaceAndActivate(singleGOTopTop[Random.Range(0, singleGOTopTop.Count)], obstacleSpawners[0]);
-                break;
-            case 1:
-                currentlyActive = PlaceAndActivate(singleGOTop[Random.Range(0, singleGOTop.Count)], obstacleSpawners[1]);
-                break;
-            case 2:
-                currentlyActive = PlaceAndActivate(compoundGO[Random.Range(0, compoundGO.Count)], obstacleSpawners[2]);
-                break;
-            case 3:
-                currentlyActive = PlaceAndActivate(singleGOBot[Random.Range(0, singleGOBot.Count)], obstacleSpawners[3]);
-                break;
-            case 4:
-                currentlyActive = PlaceAndActivate(singleGOBotBot[Random.Range(0, singleGOBotBot.Count)], obstacleSpawners[4]);
-                break;
-        }
+        currentlyActive = PlaceAndActivate(obstacles[Random.Range(0, obstacles.Count)], spawnerLocation);
     }
 	
 	// Update is called once per frame
@@ -61,25 +36,7 @@ public class ObstacleSpawn : MonoBehaviour {
         {
             int num = Random.Range(0, 5);
             currentlyActive.SetActive(false);
-            //Debug.Log(singleGOBot.Count + " " + singleGOTop.Count + " " + singleGOBotBot.Count + " " + singleGOTopTop.Count);
-            switch(num)
-            {
-                case 0:
-                    currentlyActive = PlaceAndActivate(singleGOTopTop[Random.Range(0, singleGOTopTop.Count )], obstacleSpawners[0]);
-                    break;
-                case 1:
-                    currentlyActive =  PlaceAndActivate(singleGOTop[Random.Range(0, singleGOTop.Count)], obstacleSpawners[1]);
-                    break;
-                case 2:
-                    currentlyActive = PlaceAndActivate(compoundGO[Random.Range(0, compoundGO.Count)], obstacleSpawners[2]);
-                    break;
-                case 3:
-                    currentlyActive = PlaceAndActivate(singleGOBot[Random.Range(0, singleGOBot.Count)], obstacleSpawners[3]);
-                    break;
-                case 4:
-                    currentlyActive = PlaceAndActivate(singleGOBotBot[Random.Range(0, singleGOBotBot.Count)], obstacleSpawners[4]);
-                    break;
-            }
+            currentlyActive = PlaceAndActivate(obstacles[Random.Range(0, obstacles.Count)], spawnerLocation);
             lastPosition = playerPosition;
         }
     }
