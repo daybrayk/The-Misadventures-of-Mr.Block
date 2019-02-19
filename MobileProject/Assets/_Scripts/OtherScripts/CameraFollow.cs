@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
     public Transform player;
-    float playerOffset;
+    public float playerOffset;
     // Use this for initialization
     void Start () {
-        playerOffset = transform.position.x - player.position.x;
+        if (playerOffset == 0)
+            playerOffset = -2.5f;
     }
 
 
     private void FixedUpdate()
     {
-        transform.position = new Vector3(Mathf.Clamp(player.position.x + playerOffset, transform.position.x, float.MaxValue), 0, -10);
+        if((player.position.x - transform.position.x) >= playerOffset)
+            transform.position = new Vector3(Mathf.Clamp(player.position.x - playerOffset, transform.position.x, float.MaxValue), 0, -10);
     }
 }

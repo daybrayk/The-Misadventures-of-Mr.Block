@@ -44,12 +44,15 @@ public class RopeSystem : MonoBehaviour {
     private Dictionary<Vector2, int> wrapPointsLookup = new Dictionary<Vector2, int>();
     public PolygonCollider2D attachedCollider;
     public float oldColliderPosition;
+    private Animator m_anim;
 
     /*************** Audio Variables ***************/
     public AudioClip ropeShoot;
     public AudioClip ropeBreak;
     private void Awake()
     {
+        if (!m_anim)
+            m_anim = GetComponent<Animator>();
         ropeJoint.enabled = false;
         _playerPosition = transform.position;
         _ropeHingeAnchorRb = ropeHingeAnchor.GetComponent<Rigidbody2D>();
@@ -73,6 +76,7 @@ public class RopeSystem : MonoBehaviour {
                 CheckRopeUnwrap();
             UpdateRopePositions();
         }
+        m_anim.SetBool("ropeAttached", _ropeAttached);
     }
     #region Rope Wrap
     /// <summary>

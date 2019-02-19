@@ -6,14 +6,20 @@ public class PlayerController : MonoBehaviour {
     public bool isMoving;
     public bool dash;
     public GameUI gameUI;
+    public ParticleSystem p1;
+    public ParticleSystem p2;
+    public ParticleSystem squishPE;
     private Rigidbody2D rb;
     private float swingForce;
     private float dashForce;
     [SerializeField]
     private float[] gravityTier;
     RopeSystem rs;
+    private Animator m_anim;
 	// Use this for initialization
 	void Start () {
+        if (!m_anim)
+            m_anim = GetComponent<Animator>();
         if (swingForce <= 0)
             swingForce = 4.0f;
         if (!rb)
@@ -24,6 +30,12 @@ public class PlayerController : MonoBehaviour {
         if(gravityTier.Length == 0)
             gravityTier = new float[3] { 2.5f, 5f, 10f };
 	}
+
+    private void Update()
+    {
+        m_anim.SetFloat("vVel", rb.velocity.y);
+        m_anim.SetFloat("hVel", rb.velocity.x);
+    }
 
     #region Dynamic Gravity Update
     private void FixedUpdate()
@@ -42,15 +54,19 @@ public class PlayerController : MonoBehaviour {
         //rb.velocity = new Vector2(rb.velocity.x, 0);
         switch(direction){
             case 0:
+                p1.Play();
                 rb.AddRelativeForce(perp, ForceMode2D.Impulse);
                 break;
             case 1:
+                p1.Play();
                 rb.AddRelativeForce(-perp, ForceMode2D.Impulse);
                 break;
             case 2:
+                p1.Play();
                 rb.AddRelativeForce(transform.right * dashForce, ForceMode2D.Impulse);
                 break;
             case 3:
+                p2.Play();
                 rb.AddRelativeForce(-transform.right * dashForce, ForceMode2D.Impulse);
                 break;
         }
@@ -68,14 +84,15 @@ public class PlayerController : MonoBehaviour {
     {
         gameUI.RemoveSubscriber();
         GameManager.instance.SaveGame();
-        GameManager.instance.LoadScene("TitleScene");
+        squishPE.Play();
+        //GameManager.instance.LoadScene("TitleScene");
     }
 
     public void Slice()
     {
         gameUI.RemoveSubscriber();
         GameManager.instance.SaveGame();
-        GameManager.instance.LoadScene("TitleScene");
+        GameManager.instance.LoadScene("TitleScene 1");
     }
 
     private void OnTriggerEnter2D(Collider2D c)
@@ -84,7 +101,12 @@ public class PlayerController : MonoBehaviour {
         {
             gameUI.RemoveSubscriber();
             GameManager.instance.SaveGame();
-            GameManager.instance.LoadScene("TitleScene");
+            GameManager.instance.LoadScene("TitleScene 1");
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        m_anim.SetTrigger("collision");
     }
 }
