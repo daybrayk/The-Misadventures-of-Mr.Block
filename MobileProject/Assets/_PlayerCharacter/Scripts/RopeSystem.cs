@@ -232,7 +232,8 @@ public class RopeSystem : MonoBehaviour {
                 ropeJoint.enabled = true;
                 _ropeHingeAnchorSprite.enabled = true;
             }
-            AudioManager.instance.PlaySFX(ropeShoot);
+            if(AudioManager.instance)
+                AudioManager.instance.PlaySFX(ropeShoot);
             UpdateRopePositions();
         }
         //if the raycast doesn't hit anything disable the rope

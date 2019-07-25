@@ -39,8 +39,7 @@ public class PlayerController : MonoBehaviour {
         rs = GetComponent<RopeSystem>();
         if (dashForce <= 0)
             dashForce = 6.0f;
-        if(gravityTier.Length == 0)
-            gravityTier = new float[3] { 2.5f, 5f, 10f };
+        gravityTier = new float[3] { 2.5f, 5f, 10f };
 	}
 
     private void Update()
@@ -94,24 +93,26 @@ public class PlayerController : MonoBehaviour {
 
     public void Squish()
     {
-        gameUI.RemoveSubscriber();
+        if (!GameManager.instance)
+            return;
         GameManager.instance.SaveGame();
         squishPE.Play();
-        //GameManager.instance.LoadScene("TitleScene");
     }
 
     public void Slice()
     {
-        gameUI.RemoveSubscriber();
+        if (!GameManager.instance)
+            return;
         GameManager.instance.SaveGame();
         GameManager.instance.LoadScene("TitleScene 1");
     }
 
     private void OnTriggerEnter2D(Collider2D c)
     {
+        if (!GameManager.instance)
+            return;
         if (c.tag == "KillZone" || c.tag == "Ground")
         {
-            gameUI.RemoveSubscriber();
             GameManager.instance.SaveGame();
             GameManager.instance.LoadScene("TitleScene 1");
         }
