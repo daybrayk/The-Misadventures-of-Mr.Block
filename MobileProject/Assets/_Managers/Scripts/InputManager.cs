@@ -23,13 +23,19 @@ public class InputManager : MonoBehaviour {
     void Update () {
         if (!GameManager.instance)
             return;
-        if (Input.touchCount == 0 || GameManager.instance.isPaused || EventSystem.current.IsPointerOverGameObject(m_touches[0].fingerId))   //Prevents touches from being registered when interacting with UI buttons and other event objects
+        if (Input.touchCount == 0 || GameManager.instance.isPaused)
         {
             ClearTouches();
             return;
         }
         else
             m_touches = Input.touches;
+
+        if(EventSystem.current.IsPointerOverGameObject(m_touches[0].fingerId))
+        {
+            ClearTouches();
+            return;
+        }
 
         Touch touch = m_touches[0];
         if (touch.phase == TouchPhase.Began)
