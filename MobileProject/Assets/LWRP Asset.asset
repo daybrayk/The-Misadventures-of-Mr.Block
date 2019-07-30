@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LWRP Asset
   m_EditorClassIdentifier: 
   k_AssetVersion: 4
-  m_RendererType: 1
-  m_RendererData: {fileID: 11400000, guid: 00000000000000000000000000000000, type: 0}
+  m_RendererType: 0
+  m_RendererData: {fileID: 11400000, guid: 5afe1ecde9f0bf140bcf148f71bd0144, type: 2}
   m_RequireDepthTexture: 0
   m_RequireOpaqueTexture: 0
   m_OpaqueDownsampling: 1
