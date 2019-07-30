@@ -79,6 +79,7 @@ public class InputManager : MonoBehaviour {
 
     public void ClearTouches()
     {
-        Array.Clear(m_touches, 0, m_touches.Length);
+        if(m_touches != null)
+            Array.Clear(m_touches, 0, m_touches.Length);
     }
 }

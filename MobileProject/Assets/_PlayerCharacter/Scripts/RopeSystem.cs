@@ -17,14 +17,11 @@ public struct JointInfo
 
 public class RopeSystem : MonoBehaviour {
     /*************** Constant Variables ***************/
-    private const float ROPEMAXDISTANCE = 10.0f;
+    private const float ROPEMAXDISTANCE = 20.0f;
 
     /*************** Public Variables ***************/
     public GameObject ropeHingeAnchor;
     public DistanceJoint2D ropeJoint;
-    //public SpringJoint2D ropeJoint;
-    /*public Transform crosshair;
-    public SpriteRenderer crosshairSprite;*/
     public PlayerController playerController;
     public Camera main;
     public LayerMask grappleMask;
