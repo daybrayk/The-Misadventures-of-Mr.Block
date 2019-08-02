@@ -1,14 +1,22 @@
 fileFormatVersion: 2
-guid: 60f5b5492e9beb8429af180e29820b08
+guid: ec211c2d854d09f4284abd423948e710
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: No Name
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Slider_LP
+    100000: Box
+    100002: //RootNode
+    100004: Slider
+    400000: Box
+    400002: //RootNode
+    400004: Slider
+    2100000: 01 - Default
+    2100002: 02 - Default
+    2300000: Box
+    2300002: Slider
+    3300000: Box
+    3300002: Slider
+    4300000: Box
+    4300002: Slider
   externalObjects: {}
   materials:
     importMaterials: 1

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f08c0e0cfac752944801debbfa2a3d11
+guid: cb907ebc329caff4c8755d68d0c29af9
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,7 +8,7 @@ ModelImporter:
     2100000: No Name
     2300000: //RootNode
     3300000: //RootNode
-    4300000: LaunchPad_LP
+    4300000: StartPlate_LP
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -40,7 +40,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.4
+    globalScale: 3.75
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
